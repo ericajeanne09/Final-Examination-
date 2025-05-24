@@ -1,0 +1,34 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Hypotheses: good student (1), poor student (0)
+hypotheses = np.array([1, 0])
+priors = np.array([0.7, 0.3])
+likelihoods = np.array([0.9, 0.3])  # P(pass | good), P(pass | poor)
+
+# Posterior calculation
+unnormalized_posteriors = priors * likelihoods
+posterior = unnormalized_posteriors / unnormalized_posteriors.sum()
+
+# Stats
+mean = np.sum(hypotheses * posterior)
+std_dev = np.sqrt(np.sum((hypotheses - mean)**2 * posterior))
+
+# Output
+print("Problem 4: Student Exam Performance")
+for h, p in zip(hypotheses, posterior):
+    label = "Good Student" if h == 1 else "Poor Student"
+    print(f"P({label} | Passed) = {p:.4f}")
+print(f"Posterior Mean: {mean:.4f}")
+print(f"Posterior SD: {std_dev:.4f}")
+
+# Plot
+plt.figure(figsize=(6, 4))
+plt.bar(["Good", "Poor"], posterior, color='lightgreen', edgecolor='black')
+plt.axhline(mean, color='red', linestyle='--', label=f'Mean = {mean:.2f}')
+plt.title("Posterior Probability: Student is Good or Poor")
+plt.ylabel("Posterior Probability")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
