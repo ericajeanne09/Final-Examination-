@@ -1,0 +1,32 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Hypotheses: possible probabilities of heads
+hypotheses = np.array([0.5, 0.6, 0.8])
+priors = np.array([0.5, 0.25, 0.25])
+likelihoods = hypotheses  # Likelihood of getting 1 head
+
+unnormalized_posteriors = priors * likelihoods
+posterior = unnormalized_posteriors / unnormalized_posteriors.sum()
+
+mean = np.sum(hypotheses * posterior)
+std_dev = np.sqrt(np.sum((hypotheses - mean)**2 * posterior))
+
+print("Posterior Probabilities:")
+for h, p in zip(hypotheses, posterior):
+    print(f"P(heads = {h}) = {p:.4f}")
+print(f"\nPosterior Mean: {mean:.4f}")
+print(f"Posterior Standard Deviation: {std_dev:.4f}")
+
+# Plot 
+plt.figure(figsize=(8, 5))
+plt.plot(hypotheses, posterior, marker='o', linestyle='-', color='navy', label='Posterior')
+plt.fill_between(hypotheses, posterior, color='skyblue', alpha=0.5)
+plt.axvline(mean, color='red', linestyle='--', label=f'Mean = {mean:.2f}')
+plt.title('Posterior Distribution of Coin Bias')
+plt.xlabel('Probability of Heads')
+plt.ylabel('Posterior Probability')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
