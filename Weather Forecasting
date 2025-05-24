@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Hypotheses: rain (1), no rain (0)
+hypotheses = np.array([1, 0])
+priors = np.array([0.1, 0.9])  # P(Rain), P(No Rain)
+likelihoods = np.array([0.8, 0.2])  # P(Predicts Rain | Rain), P(Predicts Rain | No Rain)
+
+unnormalized_posteriors = priors * likelihoods
+posterior = unnormalized_posteriors / unnormalized_posteriors.sum()
+
+mean = np.sum(hypotheses * posterior)
+std_dev = np.sqrt(np.sum((hypotheses - mean)**2 * posterior))
+
+print("Problem 5: Weather Forecasting")
+print(f"P(Rain | App predicts rain) = {posterior[0]:.4f}")
+print(f"P(No Rain | App predicts rain) = {posterior[1]:.4f}")
+print(f"Posterior Mean: {mean:.4f}")
+print(f"Posterior Standard Deviation: {std_dev:.4f}")
+
+# Plot
+plt.figure(figsize=(6, 4))
+plt.bar(["Rain", "No Rain"], posterior, color='lightblue', edgecolor='black')
+plt.axhline(mean, color='red', linestyle='--', label=f'Mean = {mean:.2f}')
+plt.title("Posterior Probability: Will it Really Rain?")
+plt.ylabel("Posterior Probability")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
